@@ -1,3 +1,14 @@
+"""
+********************************************************************************
+* Project Name:  ISS Overhead Notifier
+* Description:   This project is a Python-based application that tracks the International Space Station's (ISS) location and sends an email notification when the ISS is visible overhead during the night.
+* Author:        ziqkimi308
+* Created:       2024-12-12
+* Updated:       2024-12-12
+* Version:       1.0
+********************************************************************************
+"""
+
 # Import
 import requests
 import datetime as dt
