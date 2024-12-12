@@ -10,9 +10,9 @@ MY_LATITUDE = 3.139003
 MY_LONGITUDE = 101.686852
 
 # CHANGE YOUR EMAIL AND PASSWORD HERE
-MY_EMAIL = "sweetsugarpastry@gmail.com"
-MY_PASSWORD = "rqaarmydmibkgzdl" # Get your specific app password from your respective email provider
-TO_EMAIL = "sweetsugarpastry22@yahoo.com"
+MY_EMAIL = "my_email@gmail.com"
+MY_PASSWORD = "123456" # Get your specific app password from your respective email provider
+TO_EMAIL = "to_email@yahoo.com"
 
 # ---------------------------------- ISS SETUP --------------------------------------- #
 def is_iss_overhead():
