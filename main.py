@@ -5,7 +5,7 @@
 * Author:        ziqkimi308
 * Created:       2024-12-12
 * Updated:       2024-12-12
-* Version:       1.0
+* Version:       1.1
 ********************************************************************************
 """
 
@@ -36,7 +36,7 @@ def is_iss_overhead():
 	iss_latitude = float(data["iss_position"]["latitude"])
 
 
-	if MY_LATITUDE-5 <= iss_latitude <= MY_LATITUDE+5 and MY_LONGITUDE <= iss_longitude <= MY_LONGITUDE:
+	if MY_LATITUDE-5 <= iss_latitude <= MY_LATITUDE+5 and MY_LONGITUDE-5 <= iss_longitude <= MY_LONGITUDE+5:
 		return True
 
 # -------------------------------- SUNRISE SUNSET SETUP ----------------------------------------- #
@@ -47,8 +47,8 @@ def is_night():
 		"lng": MY_LONGITUDE,
 		"formatted": 0
 	}
-
-	response = requests.get(url="https://api.sunrise-sunset.org/json?lat=36.7201600&lng=-4.4203400", params=parameters)
+	
+	response = requests.get(url="https://api.sunrise-sunset.org/json", params=parameters)
 	response.raise_for_status()
 	data_response = response.json()
 
@@ -56,8 +56,8 @@ def is_night():
 	sunrise = int(data_response["results"]["sunrise"].split("T")[1].split(":")[0])
 	sunset = int(data_response["results"]["sunset"].split("T")[1].split(":")[0])
 
-	# Current time (hour only)
-	time_now = dt.datetime.now().hour
+	# Current time (hour only) - Convert to UTC time to match sunrise and sunset
+	time_now = dt.datetime.now(dt.timezone.utc).hour
 
 	if time_now <= sunrise or time_now >= sunset:
 		return True
