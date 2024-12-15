@@ -23,3 +23,8 @@
   - https://api.sunrise-sunset.org/json
 - If the ISS is overhead and it’s nighttime, the script sends an email notification to the specified recipient.
 
+---
+### Screenshots:
+
+<img width="881" alt="image" src="https://github.com/user-attachments/assets/d1ddba82-269b-4993-bcd9-e1dbc5019e90" />
+
