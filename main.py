@@ -5,7 +5,7 @@
 * Author:        ziqkimi308
 * Created:       2024-12-12
 * Updated:       2024-12-12
-* Version:       1.1
+* Version:       1.2
 ********************************************************************************
 """
 
@@ -16,6 +16,9 @@ import smtplib
 import time
 
 # --------------------------------- CONSTANT ------------------------------------------- #
+# CHANGE API DETAILS HERE
+API_ENDPOINT = "https://api.sunrise-sunset.org/json"
+
 # CHANGE YOUR LATITUDE AND LONGITUDE HERE
 MY_LATITUDE = 3.139003
 MY_LONGITUDE = 101.686852
@@ -35,20 +38,19 @@ def is_iss_overhead():
 	iss_longitude = float(data["iss_position"]["longitude"])
 	iss_latitude = float(data["iss_position"]["latitude"])
 
-
+	# Check if ISS location is approximately within range, close to your location
 	if MY_LATITUDE-5 <= iss_latitude <= MY_LATITUDE+5 and MY_LONGITUDE-5 <= iss_longitude <= MY_LONGITUDE+5:
 		return True
 
 # -------------------------------- SUNRISE SUNSET SETUP ----------------------------------------- #
 def is_night():
-	# Parameters
 	parameters = {
 		"lat": MY_LATITUDE,
 		"lng": MY_LONGITUDE,
 		"formatted": 0
 	}
-	
-	response = requests.get(url="https://api.sunrise-sunset.org/json", params=parameters)
+
+	response = requests.get(url=API_ENDPOINT, params=parameters)
 	response.raise_for_status()
 	data_response = response.json()
 
@@ -56,32 +58,28 @@ def is_night():
 	sunrise = int(data_response["results"]["sunrise"].split("T")[1].split(":")[0])
 	sunset = int(data_response["results"]["sunset"].split("T")[1].split(":")[0])
 
-	# Current time (hour only) - Convert to UTC time to match sunrise and sunset
-	time_now = dt.datetime.now(dt.timezone.utc).hour
+	# Current time (hour only)
+	time_now = dt.datetime.now().hour
 
 	if time_now <= sunrise or time_now >= sunset:
 		return True
 
 # ------------------------------ EMAIL SETUP -------------------------------- #
-if is_iss_overhead() and is_night():
-	connection = smtplib.SMTP("smtp.gmail.com", 587)
-	connection.starttls()
-	connection.login(MY_EMAIL, MY_PASSWORD)
-	connection.sendmail(
-		from_addr=MY_EMAIL,
-		to_addrs=TO_EMAIL,
-		msg="Subject:Look up to the sky!\n\nThe ISS is above you in the sky!"
-	)
-
-# You can make this code always running by:
-# while True:
-# 	# Use sleep function from time module. sleep() delays execution by 60 seconds in this case
-# 	time.sleep(60)
-# 	connection = smtplib.SMTP("smtp.gmail.com", 587)
-# 	connection.starttls()
-# 	connection.login(MY_EMAIL, MY_PASSWORD)
-# 	connection.sendmail(
-# 		from_addr=MY_EMAIL,
-# 		to_addrs=TO_EMAIL,
-# 		msg="Subject:Look up to the sky!\n\nThe ISS is above you in the sky!"
-# 	)
+while True:
+	time.sleep(60)
+	if is_iss_overhead() and is_night():
+		try:
+			connection = smtplib.SMTP("smtp.gmail.com", 587)
+			connection.starttls()
+			connection.login(MY_EMAIL, MY_PASSWORD)
+			connection.sendmail(
+        		from_addr=MY_EMAIL,
+        		to_addrs=TO_EMAIL,
+        		msg="Subject:Look up to the sky!\n\nThe ISS is above you in the sky!"
+        	)
+			print("Email successfully sent!")
+			
+		except Exception as ex:
+			print(f"Email failed to sent... Error {ex}")
+	else:
+		print("Standby...")
