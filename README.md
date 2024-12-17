@@ -1,4 +1,4 @@
-# ISS Overhead Notifier
+# ISS Overhead Notifier via Email
 
 - This project is a Python-based application that tracks the International Space Station's (ISS) location and sends an email notification when the ISS is visible overhead during the night.
 
